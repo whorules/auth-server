@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      runAlways: false
+      id: 20230710_01
+      author: Alexey Korovko
+      changes:
+        - sqlFile:
+            path: sql/001-create-user-table.sql
+            encoding: utf8
+            relativeToChangelogFile: true
