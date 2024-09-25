@@ -6,7 +6,7 @@ class UserServiceTest {
 
     @Test
     void init() {
-
+        System.out.println("This is a test commit");
     }
 
 }
