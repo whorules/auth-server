@@ -85,4 +85,5 @@ class UserControllerTest {
             .content(objectMapper.writeValueAsString(request)))
         .andExpect(status().isUnauthorized());
   }
+
 }
