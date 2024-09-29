@@ -1,6 +1,7 @@
 package com.korovko.auth.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.korovko.auth.security.service.CustomExceptionTranslationFilter;
 import com.korovko.auth.security.service.JwtAuthorizationFilter;
 import com.korovko.auth.security.service.TokenProvider;
@@ -8,6 +9,7 @@ import com.korovko.auth.security.service.UserServiceAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -44,6 +46,13 @@ public class SecurityConfiguration {
                 .addFilterBefore(new CustomExceptionTranslationFilter(userAuthenticationEntryPoint()), JwtAuthorizationFilter.class)
                 .exceptionHandling(customizer -> customizer.authenticationEntryPoint(userAuthenticationEntryPoint()));
         return http.build();
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        return new MappingJackson2HttpMessageConverter(mapper);
     }
 
     @Bean

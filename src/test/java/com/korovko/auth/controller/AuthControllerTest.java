@@ -54,17 +54,16 @@ class AuthControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.token").value("fake-jwt-token"));
   }
+
   @Test
   void shouldReturnUnauthorizedWhenLoginFails() throws Exception {
     AuthenticationRequest request = new AuthenticationRequest();
     request.setUsername("user");
     request.setPassword("wrong-password");
 
-    // Mock the authentication service to throw BadCredentialsException
     when(authenticationService.authenticate(any(AuthenticationRequest.class)))
         .thenThrow(new BadCredentialsException("Invalid credentials"));
 
-    // Perform the request and manually set the expectation for 401 Unauthorized
     mockMvc.perform(post("/auth/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(request)))

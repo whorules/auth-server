@@ -4,6 +4,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.korovko.auth.config.SecurityConfiguration;
 import com.korovko.auth.dto.CreateUserRequest;
@@ -16,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +39,9 @@ class UserControllerTest {
 
   @MockBean
   private TokenProvider tokenProvider;
+
+  @MockBean
+  private MappingJackson2HttpMessageConverter converter;
 
   @Test
   @WithMockUser(roles = "ADMIN")
@@ -63,6 +70,20 @@ class UserControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(new ObjectMapper().writeValueAsString(request)))
         .andExpect(status().isForbidden());
+  }
+
+  @Test
+  @WithAnonymousUser
+  void shouldReturnUnauthorizedWhenAnonymousTriesToCreateUser() throws Exception {
+    CreateUserRequest request = new CreateUserRequest();
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+    mockMvc.perform(post("/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request)))
+        .andExpect(status().isUnauthorized());
   }
 
 }
