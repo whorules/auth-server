@@ -69,5 +69,4 @@ class AuthControllerTest {
             .content(new ObjectMapper().writeValueAsString(request)))
         .andExpect(status().isUnauthorized());
   }
-
 }
