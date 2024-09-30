@@ -17,7 +17,8 @@ services:
   backend:
     container_name: auth-server-backend
     image: alkorovko/auth-server-backend:latest
-
+    networks:
+      - auth-server-net
     ports:
       - "8080:8080"
     depends_on:
