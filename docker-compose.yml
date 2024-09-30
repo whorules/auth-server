@@ -24,7 +24,6 @@ services:
     depends_on:
       - "postgres"
     restart: unless-stopped
-
 networks:
   auth-server-net:
     driver: bridge
