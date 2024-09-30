@@ -8,12 +8,12 @@ spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/auth_server
     username: postgres
-    password: password
+    password: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-    ddl-auto: update
-    show-sql: true
+      ddl-auto: update
+      show-sql: true
   liquibase:
     change-log: classpath:db/changelog.yml
   sql:
