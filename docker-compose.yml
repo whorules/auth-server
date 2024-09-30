@@ -16,7 +16,7 @@ services:
 
   backend:
     container_name: auth-server-backend
-    image: auth-server-backend
+    image: alkorovko/auth-server-backend:latest
 
     ports:
       - "8080:8080"
